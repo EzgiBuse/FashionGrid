@@ -1,0 +1,19 @@
+{
+  "Routes": [
+    {//UserService
+      "DownstreamPathTemplate": "/api/{service}/{everything}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7200 // Set this dynamically in code or use service discovery
+        }
+      ],
+      "UpstreamPathTemplate": "/{service}/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    }
+  ]
+ 
+  
+}
+

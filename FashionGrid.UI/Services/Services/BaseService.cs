@@ -66,8 +66,12 @@ namespace FashionGrid.UI.Services.Services
                     return new() { IsSuccess = false, Message = "InternalServerError" };
                 default:
                     var apiCont = await apiResponse.Content.ReadAsStringAsync();
-                    var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiCont);
+                    var apiResponseDto = new ResponseDto();
+                    apiResponseDto.IsSuccess = true;
+                    apiResponseDto.Result= apiCont;
                     return apiResponseDto;
+
+                   
             }
         }
     }

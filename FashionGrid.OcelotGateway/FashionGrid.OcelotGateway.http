@@ -1,0 +1,6 @@
+@FashionGrid.OcelotGateway_HostAddress = http://localhost:5130
+
+GET {{FashionGrid.OcelotGateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

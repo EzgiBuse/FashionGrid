@@ -1,6 +1,7 @@
 ﻿using FashionGrid.UI.Models.Dtos;
 using FashionGrid.UI.Services.IServices;
 using static FashionGrid.UI.Utilities.Standard;
+using static System.Net.WebRequestMethods;
 
 namespace FashionGrid.UI.Services.Services
 {
@@ -31,7 +32,7 @@ namespace FashionGrid.UI.Services.Services
 
                 ApiType = ApiType.POST,
                 Data = loginRequestDto,
-                Url = UserAPIBase + "/api/authAPI/Login"
+                Url = "https://localhost:7240/Users/Login"
             }, withBearer: false);
         }
 
@@ -42,7 +43,7 @@ namespace FashionGrid.UI.Services.Services
 
                 ApiType = ApiType.POST,
                 Data = registrationRequestDto,
-                Url = UserAPIBase + "/api/authAPI/Register"
+                Url = "https://localhost:7240/Users/Register"
             }, withBearer: false);
         }
     }

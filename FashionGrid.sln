@@ -3,11 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionGrid.UI", "FashionGrid.UI\FashionGrid.UI.csproj", "{8F19A284-8D70-45E2-B7D3-5CB5EB30B8E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionGrid.UI", "FashionGrid.UI\FashionGrid.UI.csproj", "{8F19A284-8D70-45E2-B7D3-5CB5EB30B8E8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{13CC49DD-21AA-456B-897B-102202AA0E83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionGrid.UserService", "FasgionGrid.UserService\FashionGrid.UserService.csproj", "{7E6B7FDA-45D9-444B-B6AD-8DD3109EDCB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionGrid.UserService", "FasgionGrid.UserService\FashionGrid.UserService.csproj", "{7E6B7FDA-45D9-444B-B6AD-8DD3109EDCB5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{88FBA4FC-BD68-4CFA-8B3F-57C1AC44865F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionGrid.OcelotGateway", "FashionGrid.OcelotGateway\FashionGrid.OcelotGateway.csproj", "{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,12 +27,17 @@ Global
 		{7E6B7FDA-45D9-444B-B6AD-8DD3109EDCB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E6B7FDA-45D9-444B-B6AD-8DD3109EDCB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E6B7FDA-45D9-444B-B6AD-8DD3109EDCB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7E6B7FDA-45D9-444B-B6AD-8DD3109EDCB5} = {13CC49DD-21AA-456B-897B-102202AA0E83}
+		{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2} = {88FBA4FC-BD68-4CFA-8B3F-57C1AC44865F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88E9A3FA-DB26-46DA-9E28-D05CD39F76BD}

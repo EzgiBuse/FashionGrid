@@ -1,5 +1,6 @@
 ﻿using FasgionGrid.UserService.Models.Dtos;
 using FasgionGrid.UserService.Services;
+using FashionGrid.UserService.Models.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +11,12 @@ namespace FasgionGrid.UserService.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        protected ResponseDto _responseDto;
 
         public UsersController(IUserService userService)
         {
             _userService = userService;
+            _responseDto = new();
         }
 
         [HttpPost("Register")]
@@ -25,7 +28,9 @@ namespace FasgionGrid.UserService.Controllers
                 var errorMessage = await _userService.Register(registrationRequestDto);
                 if (!string.IsNullOrEmpty(errorMessage))
                 {
-                    return BadRequest(errorMessage);
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = errorMessage;
+                    return BadRequest(_responseDto);
                 }
 
                 return Ok("User registered successfully");
@@ -47,7 +52,9 @@ namespace FasgionGrid.UserService.Controllers
                 if (loginresponse.User == null)
                 {
 
-                    return BadRequest("An error occured while logging in");
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "An error occured while logging in";
+                    return BadRequest(_responseDto);
                 }
 
 
@@ -69,8 +76,10 @@ namespace FasgionGrid.UserService.Controllers
                 var assignrolesuccess = await _userService.AssignRole(registrationRequestDto.Email, registrationRequestDto.Role.ToUpper());
                 if (!assignrolesuccess)
                 {
-
-                    return BadRequest("An error occured while assigning a role");
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "An error occured while assigning a role";
+                    return BadRequest(_responseDto);
+                    
                 }
 
                 return Ok("Role assigned successfully");
