@@ -24,12 +24,12 @@ namespace FashionGrid.UI.Services.Services
                 });
             }
 
-            public async Task<ResponseDto?> DeleteProductAsync(int id)
+            public async Task<ResponseDto?> DeleteProductAsync(string id)
             {
                 return await _baseService.SendAsync(new RequestDto()
                 {
                     ApiType = ApiType.DELETE,
-                    Url = "https://localhost:7240/Products" + id
+                    Url = "https://localhost:7240/Products/" + id
                 });
             }
 
@@ -39,17 +39,18 @@ namespace FashionGrid.UI.Services.Services
                 {
                     ApiType = ApiType.GET,
                     Url = "https://localhost:7240/Products"
-                });
+                }, withBearer: false);
             }
+       
 
-            public async Task<ResponseDto?> GetProductByIdAsync(int id)
+            public async Task<ResponseDto?> GetProductByIdAsync(string id)
             {
                 return await _baseService.SendAsync(new RequestDto()
                 {
                     ApiType = ApiType.GET,
-                    Url = "https://localhost:7240/Products" + id
-                });
-            }
+                    Url = "https://localhost:7240/Products/" + id
+                }, withBearer: false);
+             }
 
             public async Task<ResponseDto?> UpdateProductAsync(Product product)
             {

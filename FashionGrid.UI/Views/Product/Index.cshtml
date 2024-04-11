@@ -1,4 +1,4 @@
-﻿@model List<Product>
+﻿@model List<ProductDto>
 @{
     Layout = null;
 }
@@ -41,30 +41,21 @@
                 {
                     <div class="col-lg-4">
                         <div class="item">
-                            <div class="thumb">
-                                <div class="hover-content">
-                                    <ul>
-                                        <li><a href="single-product.html"><i class="fa fa-eye"></i></a></li>
-                                        <li><a href="single-product.html"><i class="fa fa-star"></i></a></li>
-                                        <li><a href="single-product.html"><i class="fa fa-shopping-cart"></i></a></li>
-                                    </ul>
+                            <!-- Wrap the entire product display in an <a> tag -->
+                            <a asp-controller="Product" asp-action="ProductDetail" asp-route-id="@product.Id" class="product-link">
+                                <div class="thumb">
+                                    <img src="@product.ImageUrls.FirstOrDefault()" alt="@product.Name">
                                 </div>
-                                <img src="@product.ImageUrls.FirstOrDefault()" alt="@product.Name">
-                            </div>
-                            <div class="down-content">
-                                <h4>@product.Name</h4>
-                                <span>$@product.Price.ToString("0.00")</span>
-                                <ul class="stars">
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                    <li><i class="fa fa-star"></i></li>
-                                </ul>
-                            </div>
+                                <div class="down-content">
+                                    <h4>@product.Name</h4>
+                                    <span>$@product.Price.ToString("0.00")</span>
+                                </div>
+                            </a>
+
                         </div>
                     </div>
                 }
+
             </div>
         </div>
     </section>

@@ -1,16 +1,40 @@
 {
   "Routes": [
-    {//UserService
-      "DownstreamPathTemplate": "/api/{service}/{everything}",
+    { //UserService
+      "DownstreamPathTemplate": "/api/Users/{everything}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7200 // Set this dynamically in code or use service discovery
+          "Port": 7200
         }
       ],
-      "UpstreamPathTemplate": "/{service}/{everything}",
+      "UpstreamPathTemplate": "/Users/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
+    },
+    {//Product Service
+      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7201
+        }
+      ],
+      "UpstreamPathTemplate": "/Products",
+      "UpstreamHttpMethod": [ "Get","Post" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/Products/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7201
+        }
+      ],
+      "UpstreamPathTemplate": "/Products/{id}",
+      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
     }
   ]
  

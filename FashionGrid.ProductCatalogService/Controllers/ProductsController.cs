@@ -106,7 +106,8 @@ namespace FashionGrid.ProductCatalogService.Controllers
                 _responseDto.Result = product;
                 _responseDto.Message = "Product created successfully.";
 
-               
+                //remove the products cache
+                await _cache.RemoveAsync("productsList");
             }
             catch (Exception ex)
             {
@@ -135,7 +136,9 @@ namespace FashionGrid.ProductCatalogService.Controllers
 
                 // invalidating the cache 
                 string cacheKey = $"product_{id}";
-                await _cache.RemoveAsync(cacheKey);
+                await _cache.RemoveAsync(cacheKey); 
+                //remove the products cache
+                await _cache.RemoveAsync("productsList");
             }
             catch (Exception ex)
             {
@@ -164,6 +167,8 @@ namespace FashionGrid.ProductCatalogService.Controllers
                 // invalidating the cache 
                 string cacheKey = $"product_{id}";
                 await _cache.RemoveAsync(cacheKey);
+                //remove the products cache
+                await _cache.RemoveAsync("productsList");
             }
             catch (Exception ex)
             {
