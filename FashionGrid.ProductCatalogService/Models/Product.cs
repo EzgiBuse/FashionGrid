@@ -17,7 +17,7 @@ namespace FashionGrid.ProductCatalogService.Models
 
         // Dynamic Attributes
         [BsonRepresentation(BsonType.Document)]
-        public Dictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, List<string>> Attributes { get; set; } = new Dictionary<string, List<string>>();
 
         public List<string> ImageUrls { get; set; } = new List<string>(); 
     }

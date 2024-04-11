@@ -11,7 +11,7 @@
         public List<string> Categories { get; set; } = new List<string>();
         public string UserId { get; set; } // Reference to the Seller
 
-        public Dictionary<string, object> Attributes { get; set; } = new Dictionary<string, object>();
+        public Dictionary<string, List<string>> Attributes { get; set; } = new Dictionary<string, List<string>>();
 
         public List<string> ImageUrls { get; set; } = new List<string>();
     }

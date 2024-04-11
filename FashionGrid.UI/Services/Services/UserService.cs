@@ -21,7 +21,7 @@ namespace FashionGrid.UI.Services.Services
 
                 ApiType = ApiType.POST,
                 Data = registrationRequestDto,
-                Url = UserAPIBase + "/api/Users/AssignRole"
+                Url = UserAPIBase + "https://localhost:7240/Users/AssignRole"
             });
         }
 

@@ -1,8 +1,12 @@
 ﻿using FashionGrid.ProductCatalogService.Models;
 using FashionGrid.ProductCatalogService.Models.Dto;
 using FashionGrid.ProductCatalogService.Services.IServices;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace FashionGrid.ProductCatalogService.Controllers
 {
@@ -11,74 +15,163 @@ namespace FashionGrid.ProductCatalogService.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
-        private ResponseDto _responseDto;
+        private readonly IDistributedCache _cache;
+        private readonly ResponseDto _responseDto;
 
-        public ProductsController(IProductService productService, ResponseDto responseDto)
+        public ProductsController(IProductService productService, IDistributedCache cache)
         {
             _productService = productService;
-            _responseDto = responseDto;
+            _cache = cache;
+            _responseDto = new ResponseDto();
         }
 
-        // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<IActionResult> GetProducts()
         {
-            var products = await _productService.GetAllAsync();
-            return Ok(products);
-        }
-
-        // GET: api/Products/{id}
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(string id)
-        {
-            var product = await _productService.GetByIdAsync(id);
-
-            if (product == null)
+            string cacheKey = "productsList";
+            try
             {
-                return NotFound();
+                var cachedData = await _cache.GetStringAsync(cacheKey);
+                if (!string.IsNullOrEmpty(cachedData))
+                {
+                    _responseDto.Result = JsonSerializer.Deserialize<List<Product>>(cachedData);
+                    _responseDto.Message = "Data retrieved from cache";
+                }
+                else
+                {
+                    var products = await _productService.GetAllAsync();
+                    _responseDto.Result = products;
+                    _responseDto.Message = "Data retrieved from database and cached";
+                    var serializedProducts = JsonSerializer.Serialize(products);
+                    await _cache.SetStringAsync(cacheKey, serializedProducts, new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                    });
+                }
             }
-
-            return Ok(product);
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+            return Ok(_responseDto);
         }
 
-        // POST: api/Products
-        [HttpPost]
-        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProduct(string id)
         {
-            await _productService.CreateAsync(product);
-            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, product);
+            string cacheKey = $"product_{id}";
+            try
+            {
+                var cachedData = await _cache.GetStringAsync(cacheKey);
+                if (!string.IsNullOrEmpty(cachedData))
+                {
+                    _responseDto.Result = JsonSerializer.Deserialize<Product>(cachedData);
+                    _responseDto.Message = "Data retrieved from cache";
+                }
+                else
+                {
+                    var product = await _productService.GetByIdAsync(id);
+                    if (product == null)
+                    {
+                        _responseDto.IsSuccess = false;
+                        _responseDto.Message = "Product not found.";
+                        return NotFound(_responseDto);
+                    }
+                    _responseDto.Result = product;
+                    _responseDto.Message = "Data retrieved from database and cached";
+                    var serializedProduct = JsonSerializer.Serialize(product);
+                    await _cache.SetStringAsync(cacheKey, serializedProduct, new DistributedCacheEntryOptions
+                    {
+                        AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5)
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+            return Ok(_responseDto);
         }
 
-        // PUT: api/Products/{id}
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] Product product)
+        {
+            try
+            {
+                await _productService.CreateAsync(product);
+                _responseDto.Result = product;
+                _responseDto.Message = "Product created successfully.";
+
+               
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+            return CreatedAtAction(nameof(GetProduct), new { id = product.Id }, _responseDto);
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromBody] Product productUpdate)
         {
-            var product = await _productService.GetByIdAsync(id);
-
-            if (product == null)
+            try
             {
-                return NotFound();
+                var productExists = await _productService.GetByIdAsync(id);
+                if (productExists == null)
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Product not found.";
+                    return NotFound(_responseDto);
+                }
+                await _productService.UpdateAsync(id, productUpdate);
+                _responseDto.Result = productUpdate;
+                _responseDto.Message = "Product updated successfully.";
+
+                // invalidating the cache 
+                string cacheKey = $"product_{id}";
+                await _cache.RemoveAsync(cacheKey);
             }
-
-            await _productService.UpdateAsync(id, productUpdate);
-
-            return NoContent(); // Or return the updated product if preferred
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+            return Ok(_responseDto);
         }
 
-        // DELETE: api/Products/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {
-            var product = await _productService.GetByIdAsync(id);
-
-            if (product == null)
+            try
             {
-                return NotFound();
+                var product = await _productService.GetByIdAsync(id);
+                if (product == null)
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = "Product not found.";
+                    return NotFound(_responseDto);
+                }
+                await _productService.DeleteAsync(id);
+                _responseDto.Message = "Product deleted successfully.";
+
+                // invalidating the cache 
+                string cacheKey = $"product_{id}";
+                await _cache.RemoveAsync(cacheKey);
             }
-
-            await _productService.DeleteAsync(id);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
+            return Ok(_responseDto);
         }
     }
 }
