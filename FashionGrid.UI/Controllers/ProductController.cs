@@ -46,32 +46,34 @@ namespace FashionGrid.UI.Controllers
 
         }
 
-        public async Task<IActionResult> ProductDetail(string id)
-        {
-            ResponseDto response = await _productService.GetProductByIdAsync(id);
-            if (response.IsSuccess && response.Result != null)
-            {
-                // Deserialize it into ProductResponseDto
-                var apiResponse = JsonConvert.DeserializeObject<ProductResponseDto>(response.Result.ToString());
+        //public async Task<IActionResult> ProductDetail1(string id)
+        //{
+        //    ResponseDto response = await _productService.GetProductByIdAsync(id);
+        //    if (response.IsSuccess && response.Result != null)
+        //    {
+        //        // Deserialize it into ProductResponseDto
+        //        var apiResponse = JsonConvert.DeserializeObject<ProductResponseDto>(response.Result.ToString());
 
-                // Checking if the deserialization was successful and apiResponse is not null
-                if (apiResponse != null)
-                {
-                    // Using apiResponse.Result which is the List<ProductDto>
-                    var products = apiResponse.Result;
-                    return View(products);
-                }
-                else
-                {
-                    //the case where deserialization failed
-                    return View(new ProductDto());
-                }
-            }
-            else
-            {
-                // the case where response.IsSuccess is false or Result is null
-                return View(new ProductDto());
-            }
-        }
+        //        // Checking if the deserialization was successful and apiResponse is not null
+        //        if (apiResponse != null)
+        //        {
+        //            // Using apiResponse.Result which is the ProductDto
+        //            var product = apiResponse.Result;
+        //            var a = product.GetType();
+                    
+        //            return View("ProductDetail",product);
+        //        }
+        //        else
+        //        {
+        //            //the case where deserialization failed
+        //            return View(new ProductDto());
+        //        }
+        //    }
+        //    else
+        //    {
+        //        // the case where response.IsSuccess is false or Result is null
+        //        return View(new ProductDto());
+        //    }
+        //}
     }
 }

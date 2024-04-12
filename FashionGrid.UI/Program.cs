@@ -17,7 +17,6 @@ builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyCont
 
 builder.Services.AddHttpClient<IUserService,UserService>();
 
-Standard.UserAPIBase = builder.Configuration["ServiceUrls:UserAPI"];
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();

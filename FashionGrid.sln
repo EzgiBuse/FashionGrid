@@ -13,7 +13,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{88FB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionGrid.OcelotGateway", "FashionGrid.OcelotGateway\FashionGrid.OcelotGateway.csproj", "{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionGrid.ProductCatalogService", "FashionGrid.ProductCatalogService\FashionGrid.ProductCatalogService.csproj", "{537C3937-DCCE-4F9E-9A76-1DBFFC1C4AE9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FashionGrid.ProductCatalogService", "FashionGrid.ProductCatalogService\FashionGrid.ProductCatalogService.csproj", "{537C3937-DCCE-4F9E-9A76-1DBFFC1C4AE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FashionGrid.CartService", "FashionGrid.CartService\FashionGrid.CartService.csproj", "{E2BBBA83-CD3E-4CDF-8EDB-43B650E7DE71}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{537C3937-DCCE-4F9E-9A76-1DBFFC1C4AE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{537C3937-DCCE-4F9E-9A76-1DBFFC1C4AE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{537C3937-DCCE-4F9E-9A76-1DBFFC1C4AE9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2BBBA83-CD3E-4CDF-8EDB-43B650E7DE71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2BBBA83-CD3E-4CDF-8EDB-43B650E7DE71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2BBBA83-CD3E-4CDF-8EDB-43B650E7DE71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2BBBA83-CD3E-4CDF-8EDB-43B650E7DE71}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -45,6 +51,7 @@ Global
 		{7E6B7FDA-45D9-444B-B6AD-8DD3109EDCB5} = {13CC49DD-21AA-456B-897B-102202AA0E83}
 		{9D9A1499-65AA-48BB-8C57-4C4DB2D90FB2} = {88FBA4FC-BD68-4CFA-8B3F-57C1AC44865F}
 		{537C3937-DCCE-4F9E-9A76-1DBFFC1C4AE9} = {13CC49DD-21AA-456B-897B-102202AA0E83}
+		{E2BBBA83-CD3E-4CDF-8EDB-43B650E7DE71} = {13CC49DD-21AA-456B-897B-102202AA0E83}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {88E9A3FA-DB26-46DA-9E28-D05CD39F76BD}

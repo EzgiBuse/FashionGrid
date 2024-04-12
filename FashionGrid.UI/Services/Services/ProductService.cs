@@ -48,7 +48,7 @@ namespace FashionGrid.UI.Services.Services
                 return await _baseService.SendAsync(new RequestDto()
                 {
                     ApiType = ApiType.GET,
-                    Url = "https://localhost:7240/Products/" + id
+                    Url = "https://localhost:7201/api/Products/" + id
                 }, withBearer: false);
              }
 

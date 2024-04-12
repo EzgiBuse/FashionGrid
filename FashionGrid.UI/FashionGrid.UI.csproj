@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="Validators\ModelValidators\" />
+    <Folder Include="wwwroot\lib\jquery-validation\dist\" />
   </ItemGroup>
 
 </Project>

@@ -1,49 +1,50 @@
-﻿<!-- ***** Header Area Start ***** -->
-<header class="header-area header-sticky">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <nav class="main-nav">
-                    <!-- ***** Logo Start ***** -->
-                    <a href="index.html" class="logo">
-                        <img src="/hexashop-1.0.0/assets/images/logo.png">
-                    </a>
-                    <!-- ***** Logo End ***** -->
-                    <!-- ***** Menu Start ***** -->
-                    <ul class="nav">
-                       
-                        <li><a class="scroll-to-section"  asp-controller="Home" asp-action="Index">Home</a></li>
-                        <li><a class="scroll-to-section" asp-controller="Product" asp-action="Index">Products</a></li>
-                        <li><a class="scroll-to-section" asp-controller="Login" asp-action="Login">Login</a></li>
-                        <li><a class="scroll-to-section" asp-controller="Register" asp-action="Register">Register</a></li>
-                        <li class="scroll-to-section"><a href="index.html">Kid's</a></li>
-                        <li class="submenu">
-                            <a href="javascript:;">Pages</a>
-                            <ul>
-                                <li><a href="about.html">About Us</a></li>
-                                <li><a href="products.html">Products</a></li>
-                                <li><a href="single-product.html">Single Product</a></li>
-                                <li><a href="contact.html">Contact Us</a></li>
-                            </ul>
-                        </li>
-                        <li class="submenu">
-                            <a href="javascript:;">Features</a>
-                            <ul>
-                                <li><a href="#">Features Page 1</a></li>
-                                <li><a href="#">Features Page 2</a></li>
-                                <li><a href="#">Features Page 3</a></li>
-                                <li><a rel="nofollow" href="https://templatemo.com/page/4" target="_blank">Template Page 4</a></li>
-                            </ul>
-                        </li>
-                        <li class="scroll-to-section"><a href="index.html">Explore</a></li>
-                    </ul>
-                    <a class='menu-trigger'>
-                        <span>Menu</span>
-                    </a>
-                    <!-- ***** Menu End ***** -->
-                </nav>
+﻿<header id="header">
+    <div id="header-wrap">
+        <nav class="secondary-nav border-bottom">
+           
+        </nav>
+        <nav class="primary-nav padding-small">
+            <div class="container">
+                <div class="row d-flex align-items-center">
+                    <div class="col-lg-2 col-md-2">
+                        <div class="main-logo">
+                            <a href="index.html">
+                                <img src="/ultras-1.0.0/images/main-logo.png" alt="logo">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-lg-10 col-md-10">
+                        <div class="navbar">
+
+                            <div id="main-nav" class="stellarnav d-flex justify-content-end right">
+                                <ul class="menu-list">
+                                    <li><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+
+                                    <li><a class="nav-link" asp-controller="Product" asp-action="Index">Products</a></li>
+
+                                   
+
+                                    <li class="menu-item has-sub">
+                                        <a href="blog.html" class="item-anchor d-flex align-item-center" data-effect="Blog">Blog<i class="icon icon-chevron-down"></i></a>
+                                        <ul class="submenu">
+                                            <li><a href="blog.html" class="item-anchor">Blog</a></li>
+                                            <li><a href="blog-sidebar.html" class="item-anchor">Blog with sidebar<span class="text-primary"> (PRO)</span></a></li>
+                                            <li><a href="blog-masonry.html" class="item-anchor">Blog masonry<span class="text-primary"> (PRO)</span></a></li>
+                                            <li><a href="single-post.html" class="item-anchor">Single post</a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li><a href="contact.html" class="item-anchor" data-effect="Contact">Contact</a></li>
+
+                                    <li><a class="nav-link" asp-controller="Login" asp-action="Login">Login</a></li>
+                                    <li><a class="nav-link" asp-controller="Register" asp-action="Register">Register</a></li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </nav>
     </div>
 </header>
-<!-- ***** Header Area End ***** -->

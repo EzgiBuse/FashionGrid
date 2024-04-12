@@ -4,65 +4,133 @@
 }
 <!DOCTYPE html>
 <html lang="en">
-
-@Html.Partial("_HeadPartialView");
-
+@Html.Partial("_HeadPartialView")
 <body>
 
-    @Html.Partial("_HeaderPartialView");
+    <div class="search-popup">
+        <div class="search-popup-container">
 
-    <!-- ***** Main Banner Area Start ***** -->
-    <div class="page-heading" id="top">
+            <form role="search" method="get" class="search-form" action="">
+                <input type="search" id="search-form" class="search-field" placeholder="Type and press enter" value="" name="s" />
+                <button type="submit" class="search-submit"><a href="#"><i class="icon icon-search"></i></a></button>
+            </form>
+
+            <h5 class="cat-list-title">Browse Categories</h5>
+
+            <ul class="cat-list">
+                <li class="cat-list-item">
+                    <a href="shop.html" title="Men Jackets">Men Jackets</a>
+                </li>
+                <li class="cat-list-item">
+                    <a href="shop.html" title="Fashion">Fashion</a>
+                </li>
+                <li class="cat-list-item">
+                    <a href="shop.html" title="Casual Wears">Casual Wears</a>
+                </li>
+                <li class="cat-list-item">
+                    <a href="shop.html" title="Women">Women</a>
+                </li>
+                <li class="cat-list-item">
+                    <a href="shop.html" title="Trending">Trending</a>
+                </li>
+                <li class="cat-list-item">
+                    <a href="shop.html" title="Hoodie">Hoodie</a>
+                </li>
+                <li class="cat-list-item">
+                    <a href="shop.html" title="Kids">Kids</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_HeaderPartialView")
+
+    <div class="shopify-grid padding-large">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="inner-content">
-                        <h2>Check Our Products</h2>
-                        <span>Awesome &amp; Creative HTML CSS layout by TemplateMo</span>
+
+                <aside class="col-md-3">
+                    <div class="widgets widget-filter">
+                        <h5 class="widget-title">Filter Products</h5>
+                        <form>
+                            <div class="form-group">
+                                <label for="category">Category:</label>
+                                <select id="category" class="form-control">
+                                    <option value="all">All</option>
+                                    <option value="men">Men</option>
+                                    <option value="women">Women</option>
+                                    <option value="kids">Kids</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="priceRange">Price Range:</label>
+                                <select id="priceRange" class="form-control">
+                                    <option value="0-50">$0 - $50</option>
+                                    <option value="51-100">$51 - $100</option>
+                                    <option value="101-150">$101 - $150</option>
+                                    <option value="150+">$150+</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                        </form>
                     </div>
-                </div>
+                </aside>
+
+                <section id="selling-products" class="col-md-9 product-store">
+                    <div class="container">
+                        <div class="row mb-3">
+                            <div class="col-md-12 d-flex justify-content-between align-items-center">
+                                <ul class="tabs list-unstyled">
+                                    <li data-tab-target="#all" class="active tab">All</li>
+                                    <li data-tab-target="#shoes" class="tab">Shoes</li>
+                                    <li data-tab-target="#tshirts" class="tab">Tshirts</li>
+                                    <li data-tab-target="#pants" class="tab">Pants</li>
+                                    <li data-tab-target="#hoodie" class="tab">Hoodie</li>
+                                    <li data-tab-target="#outer" class="tab">Outer</li>
+                                    <li data-tab-target="#jackets" class="tab">Jackets</li>
+                                    <li data-tab-target="#accessories" class="tab">Accessories</li>
+                                </ul>
+                                <div class="sorting">
+                                    <label for="sortby">Sort by:</label>
+                                    <select id="sortby" class="form-control">
+                                        <option value="newest">Newest</option>
+                                        <option value="price_low_high">Price: Low to High</option>
+                                        <option value="price_high_low">Price: High to Low</option>
+                                        <option value="popularity">Popularity</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+                            <div id="all" data-tab-content class="active">
+                                <div class="row d-flex flex-wrap">
+                                    @foreach (var product in Model)
+                                    {
+                                        <div class="product-item col-lg-4 col-md-6 col-sm-6">
+                                            <div class="image-holder">
+                                                <img src="@Url.Content(product.ImageUrls[0])" alt="@product.Name" class="product-image"
+                                                     style="width: 300px; height: 400px; object-fit: cover; display: block;">
+                                            </div>
+
+                                            <div class="product-detail">
+                                                <h3 class="product-title">
+                                                    <a href="@Url.Action("Index", "ProductDetail", new { id = product.Id })">@product.Name</a>
+                                                </h3>
+                                                <div class="item-price text-primary">$@product.Price.ToString("N2")</div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                            <!-- Additional tabs content goes here -->
+                        </div>
+                    </div>
+                </section>
+
             </div>
         </div>
     </div>
-    <!-- ***** Main Banner Area End ***** -->
-    <!-- ***** Products Area Starts ***** -->
-    <section class="section" id="products">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="section-heading">
-                        <h2>Our Latest Products</h2>
-                        <span>Check out all of our products.</span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                @foreach (var product in Model)
-                {
-                    <div class="col-lg-4">
-                        <div class="item">
-                            <!-- Wrap the entire product display in an <a> tag -->
-                            <a asp-controller="Product" asp-action="ProductDetail" asp-route-id="@product.Id" class="product-link">
-                                <div class="thumb">
-                                    <img src="@product.ImageUrls.FirstOrDefault()" alt="@product.Name">
-                                </div>
-                                <div class="down-content">
-                                    <h4>@product.Name</h4>
-                                    <span>$@product.Price.ToString("0.00")</span>
-                                </div>
-                            </a>
 
-                        </div>
-                    </div>
-                }
-
-            </div>
-        </div>
-    </section>
-    <!-- ***** Products Area Ends ***** -->
     @Html.Partial("_FooterPartialView");
     @Html.Partial("_ScriptsPartialView");
-
 </body>
-
 </html>

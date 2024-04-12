@@ -77,6 +77,7 @@ namespace FashionGrid.ProductCatalogService.Controllers
                     {
                         _responseDto.IsSuccess = false;
                         _responseDto.Message = "Product not found.";
+                        _responseDto.Result = null;
                         return NotFound(_responseDto);
                     }
                     _responseDto.Result = product;

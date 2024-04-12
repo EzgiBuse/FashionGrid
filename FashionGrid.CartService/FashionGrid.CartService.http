@@ -1,0 +1,6 @@
+@FashionGrid.CartService_HostAddress = http://localhost:5295
+
+GET {{FashionGrid.CartService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
