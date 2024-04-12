@@ -2,6 +2,12 @@
 {
     public class CartDto
     {
+        
+        public string Id { get; set; }
+
+       
+        public string UserId { get; set; }  // User identifier
+
         public List<CartItemDto> Items { get; set; } = new List<CartItemDto>();
 
         // Total items count in the cart

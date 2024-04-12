@@ -9,6 +9,9 @@ namespace FashionGrid.CartService.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
+        [BsonElement("userId")]
+        public string UserId { get; set; }  // User identifier
+
         [BsonElement("items")]
         public List<CartItem> Items { get; set; } = new List<CartItem>();
 

@@ -7,7 +7,7 @@ namespace FashionGrid.CartService.Models
     {
         [BsonId] // Defines this property as the primary key in MongoDB
         [BsonRepresentation(BsonType.ObjectId)] // Ensures the ID is treated as an ObjectId
-        public string Id { get; set; }
+        public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
 
         [BsonElement("productId")]
         public string ProductId { get; set; }

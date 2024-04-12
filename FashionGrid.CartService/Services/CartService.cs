@@ -1,4 +1,4 @@
-﻿using FashionGrid.CartService.Data;
+﻿
 using FashionGrid.CartService.Models;
 using FashionGrid.CartService.Services.IServices;
 using MongoDB.Driver;
@@ -10,11 +10,12 @@ namespace FashionGrid.CartService.Services
         {
             private readonly IMongoCollection<Cart> _carts;
 
-            public CartService(IMongoDBSettings settings)
+            public CartService(IMongoClient mongoClient,IConfiguration configuration)
             {
-                var client = new MongoClient(settings.ConnectionString);
-                var database = client.GetDatabase(settings.DatabaseName);
-                _carts = database.GetCollection<Cart>(settings.CartCollectionName);
+            var databaseName = configuration.GetValue<string>("MongoDB:DatabaseName");
+            var collectionName = configuration.GetValue<string>("MongoDB:CollectionName");
+            var database = mongoClient.GetDatabase(databaseName);
+            _carts = database.GetCollection<Cart>(collectionName);
             }
 
             public async Task<List<Cart>> GetAllCartsAsync()
@@ -27,7 +28,18 @@ namespace FashionGrid.CartService.Services
                 return await _carts.Find<Cart>(cart => cart.Id == id).FirstOrDefaultAsync();
             }
 
-            public async Task AddItemToCartAsync(string cartId, CartItem item)
+        public async Task<Cart> GetOrCreateCartAsync(string userId)
+        {
+            var cart = await _carts.Find<Cart>(c => c.UserId == userId).FirstOrDefaultAsync();
+            if (cart == null)
+            {
+                cart = new Cart { UserId = userId, Items = new List<CartItem>() };
+                await _carts.InsertOneAsync(cart);
+            }
+            return cart;
+        }
+
+        public async Task AddItemToCartByCartIdAsync(string cartId, CartItem item)
             {
                 var update = Builders<Cart>.Update.Push(cart => cart.Items, item);
                 await _carts.UpdateOneAsync(cart => cart.Id == cartId, update);
@@ -43,7 +55,14 @@ namespace FashionGrid.CartService.Services
                 await _carts.UpdateOneAsync(filter, update);
             }
 
-            public async Task RemoveItemFromCartAsync(string cartId, string productId)
+        public async Task AddItemToCartByUserIdAsync(string userId, CartItem item)
+        {
+            var cart = await GetOrCreateCartAsync(userId);
+            var update = Builders<Cart>.Update.Push(c => c.Items, item);
+            await _carts.UpdateOneAsync(c => c.Id == cart.Id, update);
+        }
+
+        public async Task RemoveItemFromCartAsync(string cartId, string productId)
             {
                 var update = Builders<Cart>.Update.PullFilter(c => c.Items, i => i.ProductId == productId);
                 await _carts.UpdateOneAsync(c => c.Id == cartId, update);

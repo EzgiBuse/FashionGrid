@@ -18,27 +18,67 @@ namespace FashionGrid.ProductCatalogService.Services
 
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
-            return await _products.Find(product => true).ToListAsync();
+            try
+            {
+                return await _products.Find(product => true).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+               // _logger.LogError("An error occurred when retrieving all products: {ExceptionMessage}", ex.Message);
+                throw;
+            }
         }
 
         public async Task<Product> GetByIdAsync(string id)
         {
-            return await _products.Find(product => product.Id == id).FirstOrDefaultAsync();
+            try
+            {
+                return await _products.Find(product => product.Id == id).FirstOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+               // _logger.LogError("An error occurred when retrieving a product by ID: {ExceptionMessage}", ex.Message);
+                throw;
+            }
         }
 
         public async Task CreateAsync(Product product)
         {
-            await _products.InsertOneAsync(product);
+            try
+            {
+                await _products.InsertOneAsync(product);
+            }
+            catch (Exception ex)
+            {
+               // _logger.LogError("An error occurred when creating a new product: {ExceptionMessage}", ex.Message);
+                throw;
+            }
         }
 
         public async Task UpdateAsync(string id, Product product)
         {
-            await _products.ReplaceOneAsync(prod => prod.Id == id, product);
+            try
+            {
+                await _products.ReplaceOneAsync(prod => prod.Id == id, product);
+            }
+            catch (Exception ex)
+            {
+               // _logger.LogError("An error occurred when updating a product: {ExceptionMessage}", ex.Message);
+                throw;
+            }
         }
 
         public async Task DeleteAsync(string id)
         {
-            await _products.DeleteOneAsync(product => product.Id == id);
+            try
+            {
+                await _products.DeleteOneAsync(product => product.Id == id);
+            }
+            catch (Exception ex)
+            {
+               // _logger.LogError("An error occurred when deleting a product: {ExceptionMessage}", ex.Message);
+                throw;
+            }
         }
     }
 }
