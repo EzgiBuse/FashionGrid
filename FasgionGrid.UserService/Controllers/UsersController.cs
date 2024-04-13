@@ -37,7 +37,9 @@ namespace FasgionGrid.UserService.Controllers
             }
             catch (Exception e)
             {
-
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = e.Message;
+                return BadRequest(_responseDto);
                 return StatusCode(500, new { Message = "An exception occurred while resigtering user" });
             }
 

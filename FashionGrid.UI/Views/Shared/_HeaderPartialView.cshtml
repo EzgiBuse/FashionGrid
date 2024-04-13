@@ -35,9 +35,17 @@
                                     </li>
 
                                     <li><a href="contact.html" class="item-anchor" data-effect="Contact">Contact</a></li>
-
-                                    <li><a class="nav-link" asp-controller="Login" asp-action="Login">Login</a></li>
-                                    <li><a class="nav-link" asp-controller="Register" asp-action="Register">Register</a></li>
+                                    @if (!User.Identity.IsAuthenticated)
+                                    {
+                                        <li><a class="nav-link" asp-controller="Login" asp-action="Login">Login</a></li>
+                                        <li><a class="nav-link" asp-controller="Register" asp-action="Register">Register</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li><a class="nav-link" href="#">Hi @User.Identity.Name</a></li>
+                                        <li><a class="nav-link" asp-controller="Login" asp-action="Logout">Logout</a></li>
+                                    }
+                                   
                                 </ul>
                             </div>
 

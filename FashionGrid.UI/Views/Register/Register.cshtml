@@ -2,40 +2,40 @@
 @{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - FashionGrid</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@Html.Partial("_HeadPartialView")
 <body>
-    <div class="container">
+    @Html.Partial("_HeaderPartialView")
+    <hr />
+    <div class="container d-flex align-items-center justify-content-center" style="height: 80vh;">
+        <!-- Center the form in the viewport and raise it a bit -->
         <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card my-5">
+            <div class="col-md-4">
+                <!-- Consistent with the login form width -->
+                <div class="card shadow" style="padding: 2rem; border-radius: 10px;">
+                    <!-- Consistent styling with login form -->
                     <div class="card-body">
-                        <h3 class="card-title text-center">Register</h3>
+                        <h3 class="card-title text-center mb-4" style="font-weight: 300;">Register</h3>
                         <form asp-controller="Register" asp-action="RegisterUser" method="post">
                             <div class="form-group">
-                                <label for="nameInput">Name</label>
-                                <input asp-for="Name" class="form-control" placeholder="Username">
+                                <label for="nameInput" style="font-weight: bold;">Name</label>
+                                <input asp-for="Name" class="form-control" id="nameInput" placeholder="Enter your name" style="border-radius: 0.25rem;">
                             </div>
                             <div class="form-group">
-                                <label for="emailInput">Email address</label>
-                                <input asp-for="Email" class="form-control" placeholder="Email">
+                                <label for="emailInput" style="font-weight: bold;">Email</label>
+                                <input asp-for="Email" class="form-control" id="emailInput" placeholder="Enter your email" style="border-radius: 0.25rem;">
                             </div>
                             <div class="form-group">
-                                <label for="PhoneNumber">Phone Number</label>
-                                <input asp-for="PhoneNumber" class="form-control" placeholder="Phone Number">
+                                <label for="phoneInput" style="font-weight: bold;">Phone</label>
+                                <input asp-for="PhoneNumber" class="form-control" id="phoneInput" placeholder="Enter your phone number" style="border-radius: 0.25rem;">
                             </div>
                             <div class="form-group">
-                                <label for="passwordInput">Password</label>
-                                <input asp-for="Password" class="form-control" placeholder="Password">
+                                <label for="passwordInput" style="font-weight: bold;">Password</label>
+                                <input asp-for="Password" type="password" class="form-control" id="passwordInput" placeholder="Enter your password" style="border-radius: 0.25rem;">
                             </div>
-                            
-                            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <button type="submit" class="btn btn-primary btn-block" style="background-color: #0056b3; border: none;">Register</button>
                         </form>
                     </div>
                 </div>
@@ -46,4 +46,3 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
-

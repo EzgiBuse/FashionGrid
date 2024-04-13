@@ -13,46 +13,21 @@ namespace FashionGrid.CartService.Controllers
     {
         private readonly ICartService _cartService;
         private readonly ResponseDto _responseDto;
-
         public CartsController(ICartService cartService)
         {
             _cartService = cartService;
             _responseDto = new ResponseDto();
         }
 
-        
-        [HttpGet]
-        public async Task<IActionResult> GetAllCarts()
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetCartByUserId(string userId)
         {
             try
             {
-                var carts = await _cartService.GetAllCartsAsync();
-                _responseDto.Result = carts;
-                _responseDto.Message = "Retrieved all carts successfully.";
-            }
-            catch (Exception ex)
-            {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
-                return BadRequest(_responseDto);
-            }
-            return Ok(_responseDto);
-        }
-
-        [HttpGet("GetCartById/{id}")]
-        public async Task<IActionResult> GetCartById(string id)
-        {
-            try
-            {
-                var cart = await _cartService.GetCartByIdAsync(id);
-                if (cart == null)
-                {
-                    _responseDto.IsSuccess = false;
-                    _responseDto.Message = "Cart not found.";
-                    return NotFound(_responseDto);
-                }
+                var cart = await _cartService.GetCartByUserIdAsync(userId);
                 _responseDto.Result = cart;
                 _responseDto.Message = "Cart retrieved successfully.";
+                return Ok(_responseDto);
             }
             catch (Exception ex)
             {
@@ -60,18 +35,16 @@ namespace FashionGrid.CartService.Controllers
                 _responseDto.Message = ex.Message;
                 return BadRequest(_responseDto);
             }
-            return Ok(_responseDto);
         }
 
-        
-        [HttpPost("AddItemToCartByUserId/{userId}")]
-        public async Task<IActionResult> AddItemToCartByUserId(string userId, [FromBody] CartItem item)
+        [HttpPost("{userId}")]
+        public async Task<IActionResult> AddItemToCart(string userId, [FromBody] CartItem item)
         {
             try
             {
-                await _cartService.AddItemToCartByUserIdAsync(userId, item);
-                _responseDto.Result = item;
+                await _cartService.AddItemToCartAsync(userId, item);
                 _responseDto.Message = "Item added to cart successfully.";
+                return CreatedAtAction(nameof(GetCartByUserId), new { userId = userId }, _responseDto);
             }
             catch (Exception ex)
             {
@@ -79,34 +52,16 @@ namespace FashionGrid.CartService.Controllers
                 _responseDto.Message = ex.Message;
                 return BadRequest(_responseDto);
             }
-            return CreatedAtAction(nameof(GetCartById), new { id = userId }, _responseDto);
         }
 
-        [HttpPut("UpdateItemQuantity/{cartId}/{productId}/{quantity}")]
-        public async Task<IActionResult> UpdateItemQuantity(string cartId, string productId, int quantity)
+        [HttpDelete("{userId}/{cartItemId}")]
+        public async Task<IActionResult> DeleteCartItem(string userId, string cartItemId)
         {
             try
             {
-                await _cartService.UpdateItemQuantityAsync(cartId, productId, quantity);
-                _responseDto.Message = "Item quantity updated successfully.";
-            }
-            catch (Exception ex)
-            {
-                _responseDto.IsSuccess = false;
-                _responseDto.Message = ex.Message;
-                return BadRequest(_responseDto);
-            }
-            return NoContent();
-        }
-
-       
-        [HttpDelete("RemoveItemFromCart/{cartId}/{productId}")]
-        public async Task<IActionResult> RemoveItemFromCart(string cartId, string productId)
-        {
-            try
-            {
-                await _cartService.RemoveItemFromCartAsync(cartId, productId);
+                await _cartService.DeleteCartItemAsync(userId, cartItemId);
                 _responseDto.Message = "Item removed from cart successfully.";
+                return Ok(_responseDto);
             }
             catch (Exception ex)
             {
@@ -114,17 +69,16 @@ namespace FashionGrid.CartService.Controllers
                 _responseDto.Message = ex.Message;
                 return BadRequest(_responseDto);
             }
-            return NoContent();
         }
 
-       
-        [HttpDelete("ClearCart/{cartId}")]
-        public async Task<IActionResult> ClearCart(string cartId)
+        [HttpPut("{userId}/{cartItemId}/{quantity}")]
+        public async Task<IActionResult> UpdateCartItem(string userId, string cartItemId,int quantity)
         {
             try
             {
-                await _cartService.ClearCartAsync(cartId);
-                _responseDto.Message = "Cart cleared successfully.";
+                await _cartService.UpdateCartItemAsync(userId, cartItemId, quantity);
+                _responseDto.Message = "Cart item updated successfully.";
+                return Ok(_responseDto);
             }
             catch (Exception ex)
             {
@@ -132,7 +86,23 @@ namespace FashionGrid.CartService.Controllers
                 _responseDto.Message = ex.Message;
                 return BadRequest(_responseDto);
             }
-            return NoContent();
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> ClearCart(string userId)
+        {
+            try
+            {
+                await _cartService.ClearCartAsync(userId);
+                _responseDto.Message = "Cart cleared successfully.";
+                return Ok(_responseDto);
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+                return BadRequest(_responseDto);
+            }
         }
     }
 }

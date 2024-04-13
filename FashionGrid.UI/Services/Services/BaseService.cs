@@ -62,6 +62,8 @@ namespace FashionGrid.UI.Services.Services
                     return new() { IsSuccess = false, Message = "Forbidden" };
                 case HttpStatusCode.Unauthorized:
                     return new() { IsSuccess = false, Message = "Unauthorized" };
+                case HttpStatusCode.BadRequest:
+                    return new() { IsSuccess = false, Message = "BadRequest" };
                 case HttpStatusCode.InternalServerError:
                     return new() { IsSuccess = false, Message = "InternalServerError" };
                 default:

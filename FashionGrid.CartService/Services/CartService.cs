@@ -1,78 +1,112 @@
-﻿
-using FashionGrid.CartService.Models;
+﻿using FashionGrid.CartService.Models;
 using FashionGrid.CartService.Services.IServices;
 using MongoDB.Driver;
+using System;
+using System.Threading.Tasks;
 
 namespace FashionGrid.CartService.Services
 {
-   
-        public class CartService :ICartService
-        {
-            private readonly IMongoCollection<Cart> _carts;
+    public class CartService : ICartService
+    {
+        private readonly IMongoCollection<Cart> _carts;
 
-            public CartService(IMongoClient mongoClient,IConfiguration configuration)
-            {
+        public CartService(IMongoClient mongoClient, IConfiguration configuration)
+        {
             var databaseName = configuration.GetValue<string>("MongoDB:DatabaseName");
             var collectionName = configuration.GetValue<string>("MongoDB:CollectionName");
             var database = mongoClient.GetDatabase(databaseName);
             _carts = database.GetCollection<Cart>(collectionName);
-            }
-
-            public async Task<List<Cart>> GetAllCartsAsync()
-            {
-                return await _carts.Find(cart => true).ToListAsync();
-            }
-
-            public async Task<Cart> GetCartByIdAsync(string id)
-            {
-                return await _carts.Find<Cart>(cart => cart.Id == id).FirstOrDefaultAsync();
-            }
-
-        public async Task<Cart> GetOrCreateCartAsync(string userId)
-        {
-            var cart = await _carts.Find<Cart>(c => c.UserId == userId).FirstOrDefaultAsync();
-            if (cart == null)
-            {
-                cart = new Cart { UserId = userId, Items = new List<CartItem>() };
-                await _carts.InsertOneAsync(cart);
-            }
-            return cart;
         }
 
-        public async Task AddItemToCartByCartIdAsync(string cartId, CartItem item)
+        public async Task<Cart> GetCartByUserIdAsync(string userId)
+        {
+            try
             {
-                var update = Builders<Cart>.Update.Push(cart => cart.Items, item);
-                await _carts.UpdateOneAsync(cart => cart.Id == cartId, update);
+                return await _carts.Find(cart => cart.UserId == userId).FirstOrDefaultAsync();
             }
+            catch (Exception ex)
+            {
+                
+                throw new Exception($"An error occurred while retrieving the cart by UserId: {userId}", ex);
+            }
+        }
 
-            public async Task UpdateItemQuantityAsync(string cartId, string productId, int quantity)
+        public async Task AddItemToCartAsync(string userId, CartItem item)
+        {
+            try
+            {
+                var cart = await GetOrCreateCartAsync(userId); 
+                var update = Builders<Cart>.Update.Push(c => c.Items, item);
+                await _carts.UpdateOneAsync(c => c.UserId == userId, update);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while adding an item to the cart for UserId: {userId}", ex);
+            }
+        }
+
+        public async Task DeleteCartItemAsync(string userId, string cartItemId)
+        {
+            try
+            {
+                var update = Builders<Cart>.Update.PullFilter(cart => cart.Items, item => item.Id == cartItemId);
+                await _carts.UpdateOneAsync(cart => cart.UserId == userId, update);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while deleting an item from the cart for UserId: {userId}", ex);
+            }
+        }
+
+        public async Task UpdateCartItemAsync(string userId, string cartItemId, int quantity)
+        {
+            try
             {
                 var filter = Builders<Cart>.Filter.And(
-                    Builders<Cart>.Filter.Eq(c => c.Id, cartId),
-                    Builders<Cart>.Filter.ElemMatch(c => c.Items, i => i.ProductId == productId)
+                    Builders<Cart>.Filter.Eq(cart => cart.UserId, userId),
+                    Builders<Cart>.Filter.ElemMatch(cart => cart.Items, item => item.Id == cartItemId)
                 );
                 var update = Builders<Cart>.Update.Set("Items.$.Quantity", quantity);
                 await _carts.UpdateOneAsync(filter, update);
             }
-
-        public async Task AddItemToCartByUserIdAsync(string userId, CartItem item)
-        {
-            var cart = await GetOrCreateCartAsync(userId);
-            var update = Builders<Cart>.Update.Push(c => c.Items, item);
-            await _carts.UpdateOneAsync(c => c.Id == cart.Id, update);
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while updating the quantity of an item for UserId: {userId}", ex);
+            }
         }
 
-        public async Task RemoveItemFromCartAsync(string cartId, string productId)
+        public async Task<Cart> GetOrCreateCartAsync(string userId)
+        {
+            try
             {
-                var update = Builders<Cart>.Update.PullFilter(c => c.Items, i => i.ProductId == productId);
-                await _carts.UpdateOneAsync(c => c.Id == cartId, update);
+                var cart = await _carts.Find<Cart>(c => c.UserId == userId).FirstOrDefaultAsync();
+                if (cart == null)
+                {
+                    cart = new Cart { UserId = userId, Items = new List<CartItem>() };
+                    await _carts.InsertOneAsync(cart);
+                }
+                return cart;
             }
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while retrieving or creating a cart for UserId: {userId}", ex);
+            }
+        }
 
-            public async Task ClearCartAsync(string cartId)
+        public async Task ClearCartAsync(string userId)
+        {
+            try
             {
                 var update = Builders<Cart>.Update.Set(c => c.Items, new List<CartItem>());
-                await _carts.UpdateOneAsync(c => c.Id == cartId, update);
+                await _carts.UpdateOneAsync(c => c.UserId == userId, update);
             }
-        
+            catch (Exception ex)
+            {
+                throw new Exception($"An error occurred while clearing the cart for UserId: {userId}", ex);
+            }
+        }
+
+
+
     }
 }
