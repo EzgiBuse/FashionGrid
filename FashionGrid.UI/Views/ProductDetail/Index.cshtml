@@ -2,54 +2,102 @@
 @{
     Layout = null;
 }
+
 <!DOCTYPE html>
 <html lang="en">
 @Html.Partial("_HeadPartialView")
 <body>
     @Html.Partial("_HeaderPartialView")
-    
-   
-    <section class="main-content padding-large">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <!-- Main Product Image -->
-                    <img src="@Url.Content(@Model.ImageUrls[0])" alt="@Model.Name" class="product-image"
-                         style="width: 300px; height: 400px; object-fit: cover; display: block;">
+    <hr />
+    <section class="main-content" style="padding-bottom: 100px; padding-top: 70px;">
+        <!-- Increased bottom padding -->
+        <div class="container mt-5">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center">
+                    <!-- Main Product Image centered with added shadow for better emphasis -->
+                    <img src="@Url.Content(@Model.ImageUrls[0])" alt="@Model.Name" class="product-image shadow"
+                         style="width: 100%; max-width: 400px; height: auto; border-radius: 5px;">
                 </div>
                 <div class="col-md-6">
                     <div class="product-detail-content">
-                        <h2>@Model.Name</h2>
-                        <p class="price">€@Model.Price.ToString("0.00")</p>
+                        <h2 class="text-primary">@Model.Name</h2>
+                        <p class="price" style="font-size: 24px; color: #555;">€@Model.Price.ToString("0.00")</p>
                         <p>@Model.Description</p>
                         @if (Model.Attributes != null)
-{
-                         @foreach (var attribute in Model.Attributes)
-                    {
-                        <div class="product-attribute">
-                                <h4>@Html.Raw(attribute.Key)</h4>
-                            @foreach (var value in attribute.Value)
+                        {
+                            foreach (var attribute in Model.Attributes)
                             {
-                                <button class="attribute-option btn btn-outline-secondary" data-attribute="attribute.Key" data-value="@value">
-                                    @value
-                                </button>
+                                <div class="product-attribute mb-2">
+                                    <h4>@Html.Raw(attribute.Key)</h4>
+                                    <div class="btn-group">
+                                       @foreach (var value in attribute.Value)
+                                        {
+                                            <button class="btn btn-outline-primary btn-sm attribute-button"
+                                                    data-attribute="attribute.Key" data-value="@value"
+                                                    onclick="selectAttribute(this)">
+                                                @value
+                                            </button>
+                                        }
+
+                                    </div>
+                                </div>
                             }
+                        }
+                        <div class="add-to-cart mt-4">
+                            <button type="button" class="btn btn-lg btn-primary" onclick="addToCart()">Add to Cart</button>
+
                         </div>
-                    }
-                    }
-                        <div class="add-to-cart">
-                            <button type="button" class="btn btn-primary">Add to Cart</button>
-                        </div>
-                      
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
     <hr />
+
     @Html.Partial("_FooterPartialView")
     @Html.Partial("_ScriptsPartialView")
+    <script>
+        var selectedAttributes = {};
 
+        function selectAttribute(button) {
+            var attributeKey = button.getAttribute('data-attribute');
+            var attributeValue = button.getAttribute('data-value');
 
+            // Toggle selection for this attribute value
+            if (!selectedAttributes[attributeKey]) {
+                selectedAttributes[attributeKey] = attributeValue;
+            } else {
+                if (selectedAttributes[attributeKey] === attributeValue) {
+                    delete selectedAttributes[attributeKey]; // Deselect if already selected
+                } else {
+                    selectedAttributes[attributeKey] = attributeValue; // Change to new selection
+                }
+            }
+
+            // Update button styles
+            updateButtons(attributeKey);
+        }
+
+        function updateButtons(attributeKey) {
+            var buttons = document.querySelectorAll(`button[data-attribute='${attributeKey}']`);
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-value') === selectedAttributes[attributeKey]) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        function addToCart() {
+            // Assuming you have a way to get the userId if needed or handle anonymously
+            console.log('Selected Attributes:', selectedAttributes);
+            // AJAX call to add to cart can be added here if you're handling via API
+
+            // For demo, just log to console
+            alert('Added to cart with attributes: ' + JSON.stringify(selectedAttributes));
+        }
+    </script>
 </body>
 </html>
