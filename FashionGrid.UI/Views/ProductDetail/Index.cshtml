@@ -6,7 +6,16 @@
 <!DOCTYPE html>
 <html lang="en">
 @Html.Partial("_HeadPartialView")
+<style>
+    .btn-outline-primary.active, .btn-outline-primary.active:hover {
+        background-color: #007bff !important; /* Change background color */
+        color: white !important; /* Ensure text color is white */
+        border-color: #007bff !important; /* Optional: change border color to match */
+    }
+</style>
 <body>
+    
+
     @Html.Partial("_HeaderPartialView")
     <hr />
     <section class="main-content" style="padding-bottom: 100px; padding-top: 70px;">
@@ -57,22 +66,19 @@
 
     @Html.Partial("_FooterPartialView")
     @Html.Partial("_ScriptsPartialView")
+
     <script>
-        var selectedAttributes = {};
+        window.selectedAttributes = {};
 
         function selectAttribute(button) {
             var attributeKey = button.getAttribute('data-attribute');
             var attributeValue = button.getAttribute('data-value');
 
             // Toggle selection for this attribute value
-            if (!selectedAttributes[attributeKey]) {
-                selectedAttributes[attributeKey] = attributeValue;
+            if (selectedAttributes[attributeKey] === attributeValue) {
+                delete selectedAttributes[attributeKey]; // Deselect if already selected
             } else {
-                if (selectedAttributes[attributeKey] === attributeValue) {
-                    delete selectedAttributes[attributeKey]; // Deselect if already selected
-                } else {
-                    selectedAttributes[attributeKey] = attributeValue; // Change to new selection
-                }
+                selectedAttributes[attributeKey] = attributeValue; // Change to new selection or add new
             }
 
             // Update button styles
@@ -91,13 +97,38 @@
         }
 
         function addToCart() {
-            // Assuming you have a way to get the userId if needed or handle anonymously
-            console.log('Selected Attributes:', selectedAttributes);
-            // AJAX call to add to cart can be added here if you're handling via API
+            // Prepare the data to be sent
+            var data = {
+                productId: '@Model.Id',
+                name: '@Model.Name',
+                price: @Model.Price,
+               
+                description: '@Model.Description',
+                imageUrl: '@Model.ImageUrls[0]', // Assuming the first image URL is used
+                attributes: Object.values(selectedAttributes)
+            };
 
-            // For demo, just log to console
-            alert('Added to cart with attributes: ' + JSON.stringify(selectedAttributes));
+            // Fetch API to send data to the server
+            fetch('/Cart/AddToCart', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data) // Send data as JSON string
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('Product added to cart successfully!');
+                    } else {
+                        throw new Error('Something went wrong on the server side!');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to add to cart. Please try again.');
+                });
         }
     </script>
+
 </body>
 </html>
