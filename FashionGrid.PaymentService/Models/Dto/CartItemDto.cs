@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace FashionGrid.UI.Models.Dtos
+namespace FashionGrid.PaymentService.Models.Dtos
 {
     public class CartItemDto
     {

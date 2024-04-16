@@ -31,19 +31,40 @@ namespace FashionGrid.CartService.Services
             }
         }
 
-        public async Task AddItemToCartAsync(string userId, CartItem item)
+        public async Task AddItemToCartAsync(string userId, CartItem newItem)
         {
             try
             {
-                var cart = await GetOrCreateCartAsync(userId); 
-                var update = Builders<Cart>.Update.Push(c => c.Items, item);
-                await _carts.UpdateOneAsync(c => c.UserId == userId, update);
+                var cart = await GetOrCreateCartAsync(userId);
+
+                // Check if the cart already contains an item with the same productId and attributes
+                var existingItem = cart.Items.FirstOrDefault(i => i.ProductId == newItem.ProductId &&
+                                                                  Enumerable.SequenceEqual(i.Attributes.OrderBy(a => a),
+                                                                                           newItem.Attributes.OrderBy(a => a)));
+
+                if (existingItem != null)
+                {
+                    // If found, update the quantity of the existing item
+                    var filter = Builders<Cart>.Filter.And(
+                        Builders<Cart>.Filter.Eq(c => c.UserId, userId),
+                        Builders<Cart>.Filter.ElemMatch(c => c.Items, i => i.Id == existingItem.Id)
+                    );
+                    var update = Builders<Cart>.Update.Set("Items.$.Quantity", existingItem.Quantity + newItem.Quantity);
+                    await _carts.UpdateOneAsync(filter, update);
+                }
+                else
+                {
+                    // If not found, add the new item to the cart
+                    var update = Builders<Cart>.Update.Push(c => c.Items, newItem);
+                    await _carts.UpdateOneAsync(c => c.UserId == userId, update);
+                }
             }
             catch (Exception ex)
             {
-                throw new Exception($"An error occurred while adding an item to the cart for UserId: {userId}", ex);
+                throw new Exception($"An error occurred while adding or updating an item in the cart for UserId: {userId}", ex);
             }
         }
+
 
         public async Task DeleteCartItemAsync(string userId, string cartItemId)
         {

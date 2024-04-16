@@ -2,6 +2,7 @@
 using FashionGrid.UI.Models.Dtos;
 using FashionGrid.UI.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,30 +24,34 @@ namespace FashionGrid.UI.Controllers
             {
                 string userId = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
 
-                
-               var response = await _cartService.GetCartByUserIdAsync(userId);
-                if (!response.IsSuccess)
+               
+                var response = await _cartService.GetCartByUserIdAsync(userId);
+                if (response == null || !response.IsSuccess)
                 {
-                    // Handle the case where the cart is not found or another error occurred
-                    return View("Error", new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+                   
+                    return View(new CartDto());
                 }
 
-                var cart = response.Result as CartDto; // Make sure the Result is cast to the type Cart
+               
+                var cart = JsonConvert.DeserializeObject<CartResponseDto>(response.Result.ToString());
+                var cartDto = cart.Result;
                 if (cart == null)
                 {
-                    return NotFound("Cart not found.");
+                    return View(new CartDto()) ;
                 }
 
-                return View(cart);
+                return View(cartDto);
             }
             catch (Exception ex)
             {
-                // Log the error message or handle it according to your needs
-                return Json(new { success = false, message = ex.Message });
+               
+                return View(new CartDto()) ;
             }
         }
 
-      
+
+
+
         [HttpPost]
         public async Task<IActionResult> AddToCart([FromBody] AddToCartRequest request)
         {
@@ -71,6 +76,24 @@ namespace FashionGrid.UI.Controllers
             }
 
         }
+
+        
+        public async Task<IActionResult> RemoveItem(string cartItemId)
+        {
+            try
+            {
+                string userId = User.FindFirst(JwtRegisteredClaimNames.Sub)?.Value;
+
+                await _cartService.RemoveItemFromCartAsync(userId, cartItemId);
+                return RedirectToAction("Index"); // Redirect to the cart view or wherever appropriate
+            }
+            catch (Exception ex)
+            {
+                
+                return View();
+            }
+        }
+
 
     }
 }
