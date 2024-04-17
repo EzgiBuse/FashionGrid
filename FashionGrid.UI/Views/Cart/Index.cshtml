@@ -63,7 +63,10 @@
             </div>
             <div class="row">
                 <div class="col-12 text-center mt-4">
-                    <button class="btn btn-primary btn-lg">Proceed to Checkout</button>
+                    <form asp-controller="Payment" asp-action="CreateCheckoutSession" method="post">
+                        <button type="submit" class="btn btn-primary btn-lg">Proceed to Checkout</button>
+                    </form>
+
                 </div>
             </div>
         </div>

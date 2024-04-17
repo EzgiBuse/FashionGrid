@@ -1,4 +1,5 @@
 ﻿using FashionGrid.PaymentService.Models.Dtos;
+using FashionGrid.PaymentService.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
@@ -9,27 +10,25 @@ namespace FashionGrid.PaymentService.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
-        // Payment Controller in the Payment Service
+        private readonly StripePaymentService _stripePaymentService;
+
+        public PaymentsController(StripePaymentService stripePaymentService)
+        {
+            _stripePaymentService = stripePaymentService;
+        }
+
         [HttpPost("create-checkout-session")]
-        public async Task<IActionResult> CreateCheckoutSession([FromBody] List<CartItemDto> cartItems)
+        public async Task<IActionResult> CreateCheckoutSession([FromBody] List<CartItemDto> items)
         {
-            //var sessionUrl = await _paymentService.CreateStripeCheckoutSession(cartItems);
-            return Ok(new { url = sessionUrl });
-        }
-
-        // Method in PaymentService to create Stripe session
-        public async Task<string> CreateStripeCheckoutSession(List<CartItemDto> cartItems)
-        {
-            var options = new SessionCreateOptions
+            try
             {
-                // Setup payment methods, line items from cartItems, and redirection URLs
-                SuccessUrl = "https://example.com/payment-success?session_id={CHECKOUT_SESSION_ID}",
-                CancelUrl = "https://example.com/payment-cancelled",
-            };
-            var service = new SessionService();
-            Session session = await service.CreateAsync(options);
-            return session.Url; // URL to which the user will be redirected to complete the payment
+                var sessionUrl = await _stripePaymentService.CreateCheckoutSessionAsync(items);
+                return Ok(new { Url = sessionUrl });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
-
     }
 }
