@@ -59,7 +59,7 @@ namespace FashionGrid.UI.Services.Services
                     ApiType = ApiType.PUT,
                     Data = product,
                     Url = "https://localhost:7240/Products"
-                });
+                }, withBearer: false);
             }
         }
     

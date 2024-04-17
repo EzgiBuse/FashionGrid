@@ -40,9 +40,10 @@ namespace FashionGrid.UI.Controllers
                     // Assume cartDto contains the necessary cart data
 
                     var cart = JsonConvert.DeserializeObject<CartResponseDto>(cartResult.Result.ToString());
+                var total = cart.Result.TotalPrice;
                     var userCart = cart.Result.Items;
                     // Redirect to Stripe Checkout
-                  var res = await _paymentService.CreateStripeSessionAsync(userCart);
+                  var res = await _paymentService.CreateStripeSessionAsync(total);
                 return View(res);
                 }
                 catch (System.Exception ex)
