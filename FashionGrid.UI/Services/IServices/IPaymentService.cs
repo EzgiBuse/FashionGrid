@@ -4,6 +4,6 @@ namespace FashionGrid.UI.Services.IServices
 {
     public interface IPaymentService
     {
-        Task<ResponseDto?> CreateStripeSessionAsync(decimal cartTotal);
+        Task<ResponseDto?> CreateStripeSessionAsync(List<CartItemDto> CartItems);
     }
 }

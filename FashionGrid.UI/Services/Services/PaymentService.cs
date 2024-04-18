@@ -1,5 +1,6 @@
 ﻿using FashionGrid.UI.Models.Dtos;
 using FashionGrid.UI.Services.IServices;
+using Microsoft.AspNetCore.Mvc;
 using static FashionGrid.UI.Utilities.Standard;
 
 namespace FashionGrid.UI.Services.Services
@@ -13,12 +14,12 @@ namespace FashionGrid.UI.Services.Services
         {
             _baseService = baseService;
         }
-        public async Task<ResponseDto?> CreateStripeSessionAsync(decimal cartTotal)
+        public async Task<ResponseDto?> CreateStripeSessionAsync(List<CartItemDto> CartItems)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.POST,
-                Data = cartTotal,
+                Data = CartItems,
                 Url = $"{BasePaymentUrl}/CreateCheckoutSession"
             });
         }

@@ -3,6 +3,7 @@ using FashionGrid.UI.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using static FashionGrid.UI.Models.Dtos.CheckoutResultUrlDto;
 
 namespace FashionGrid.UI.Controllers
 {
@@ -40,15 +41,18 @@ namespace FashionGrid.UI.Controllers
                     // Assume cartDto contains the necessary cart data
 
                     var cart = JsonConvert.DeserializeObject<CartResponseDto>(cartResult.Result.ToString());
-                var total = cart.Result.TotalPrice;
+                    var total = cart.Result.TotalPrice;
                     var userCart = cart.Result.Items;
+
                     // Redirect to Stripe Checkout
-                  var res = await _paymentService.CreateStripeSessionAsync(total);
-                return View(res);
-                }
+                    var response = await _paymentService.CreateStripeSessionAsync(userCart);
+                    var result = JsonConvert.DeserializeObject<CheckoutResultUrlDto>(response.Result.ToString());
+
+                  return Redirect(result.Url);
+                 }
                 catch (System.Exception ex)
                 {
-                    // Log the error or handle it appropriately
+                   
                     return View(new CartDto());
                 }
             

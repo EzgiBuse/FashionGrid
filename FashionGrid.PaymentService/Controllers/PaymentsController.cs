@@ -33,11 +33,11 @@ namespace FashionGrid.PaymentService.Controllers
         //}
 
         [HttpPost("CreateCheckoutSession")]
-        public async Task<IActionResult> CreateCheckoutSession([FromBody] decimal carttotal)
+        public async Task<IActionResult> CreateCheckoutSession([FromBody] List<CartItemDto> CartItems)
         {
             try
             {
-                var sessionUrl = await _stripePaymentService.CreateCheckoutSessionAsync(carttotal);
+                var sessionUrl = await _stripePaymentService.CreateCheckoutSessionAsync(CartItems);
                 return Ok(new { Url = sessionUrl });
             }
             catch (Exception ex)
