@@ -13,8 +13,9 @@ namespace FashionGrid.OrderService.Services
 
         public OrderService(IMongoClient mongoClient, IConfiguration configuration)
         {
-            var databaseName = configuration.GetValue<string>("MongoDB:DatabaseName");
-            var collectionName = configuration.GetValue<string>("MongoDB:CollectionName");
+            var databaseName = configuration["MongoDb:DatabaseName"];
+            var collectionName = configuration["MongoDb:OrderCollectionName"];
+
             var database = mongoClient.GetDatabase(databaseName);
             _orders = database.GetCollection<Order>(collectionName);
         }

@@ -35,7 +35,7 @@ namespace FashionGrid.PaymentService.Services
                     Quantity = item.Quantity,
                 }).ToList(),
                 Mode = "payment",
-                SuccessUrl = "https://yourdomain.com/success?session_id={CHECKOUT_SESSION_ID}",
+                SuccessUrl = "https://localhost:7194/Order/Index",
                 CancelUrl = "https://yourdomain.com/cancel",
             };
 

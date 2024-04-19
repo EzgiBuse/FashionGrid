@@ -1,3 +1,5 @@
+using FashionGrid.OrderService.Services;
+using FashionGrid.OrderService.Services.IServices;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,10 @@ builder.Services.AddScoped(serviceProvider =>
     var client = serviceProvider.GetRequiredService<IMongoClient>();
     return client.GetDatabase(databaseName);
 });
+
+builder.Services.AddScoped<IOrderService,OrderService>();
+
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
