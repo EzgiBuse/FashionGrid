@@ -56,12 +56,41 @@ namespace FasgionGrid.UserService.Services
 
             try
             {
-                //Creating the user
+                //Creating the customer user
                 var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
                 if (result.Succeeded)
                 {
                    await AssignRole(user.Email, "CUSTOMER");
-                    //await _userManager.AddToRoleAsync(user, "CUSTOMER");
+                   
+                    var registeredUser = await _userManager.FindByEmailAsync(user.Email);
+
+                    UserDto userDto = _mapper.Map<UserDto>(registeredUser);
+
+
+                    return "";
+                }
+            }
+            catch (Exception x)
+            {
+                return x.Message;
+            }
+            return "Error Encountered";
+        }
+
+        public async Task<string> RegisterDealer(RegistrationRequestDto registrationRequestDto)
+        {
+            //Registering a new user to the system
+            ApplicationUser user = _mapper.Map<ApplicationUser>(registrationRequestDto);
+            user.Surname = "";
+
+            try
+            {
+                //Creating the dealer user
+                var result = await _userManager.CreateAsync(user, registrationRequestDto.Password);
+                if (result.Succeeded)
+                {
+                    await AssignRole(user.Email, "DEALER");
+                   
                     var registeredUser = await _userManager.FindByEmailAsync(user.Email);
 
                     UserDto userDto = _mapper.Map<UserDto>(registeredUser);

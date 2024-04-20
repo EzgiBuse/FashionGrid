@@ -10,5 +10,6 @@ namespace FashionGrid.UI.Services.IServices
         Task<ResponseDto?> GetOrdersByUserIdAsync(string userId);
         Task<ResponseDto?> UpdateOrderStatusAsync(string orderId, OrderStatus status);
         Task<ResponseDto?> GetOrdersByDealerIdAsync(string dealerId);
+        Task<ResponseDto?> GetDealerPanelIndexStatistics(string dealerId);
     }
 }

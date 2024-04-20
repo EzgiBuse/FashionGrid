@@ -10,6 +10,7 @@ namespace FashionGrid.OrderService.Services.IServices
         Task<IEnumerable<Order>> GetAllOrders();
         Task<IEnumerable<Order>> GetOrdersByDealerId(string dealerId); 
        Task<Order> GetOrderById(string orderId);
+        Task<DealerPanelIndexModel> GetDealerPanelIndexStatistics(string dealerId);
     }
 
 }

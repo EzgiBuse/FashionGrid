@@ -57,7 +57,7 @@ namespace FashionGrid.UI.Controllers
                     {
                         StripeSessionId = "sess_xyz123",  
                         PaymentIntentId = "pi_xyz123",    
-                        PaymentStatus = 0  
+                        PaymentStatus = PaymentStatus.Paid
                     }
 
             };

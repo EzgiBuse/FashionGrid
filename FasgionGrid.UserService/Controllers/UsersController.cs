@@ -45,6 +45,32 @@ namespace FasgionGrid.UserService.Controllers
 
         }
 
+        [HttpPost("RegisterDealer")]
+        public async Task<IActionResult> RegisterDealer([FromBody] RegistrationRequestDto registrationRequestDto)
+        {
+            //Registering a user dealer
+            try
+            {
+                var errorMessage = await _userService.RegisterDealer(registrationRequestDto);
+                if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    _responseDto.IsSuccess = false;
+                    _responseDto.Message = errorMessage;
+                    return BadRequest(_responseDto);
+                }
+
+                return Ok("Dealer registered successfully");
+            }
+            catch (Exception e)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = e.Message;
+                return BadRequest(_responseDto);
+               
+            }
+
+        }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {

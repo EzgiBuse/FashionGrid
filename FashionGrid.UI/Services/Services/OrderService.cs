@@ -59,5 +59,14 @@ namespace FashionGrid.UI.Services.Services
                 Url = $"https://localhost:7203/api/Orders/GetOrdersByDealerId/{dealerId}"
             });
         }
+
+        public async Task<ResponseDto?> GetDealerPanelIndexStatistics(string dealerId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.GET,
+                Url = $"https://localhost:7203/api/Orders/GetDealerPanelIndexStatistics/{dealerId}"
+            });
+        }
     }
 }

@@ -103,5 +103,49 @@ namespace FashionGrid.OrderService.Services
                 throw new Exception($"An error occurred while retrieving the order with ID: {orderId}.", ex);
             }
         }
+
+        public async Task<DealerPanelIndexModel> GetDealerPanelIndexStatistics(string dealerId)
+        {
+            var today = DateTime.UtcNow;
+            var startOfDay = new DateTime(today.Year, today.Month, today.Day, 0, 0, 0, DateTimeKind.Utc);
+            var startOfWeek = startOfDay.AddDays(-(int)today.DayOfWeek);
+            var startOfMonth = new DateTime(today.Year, today.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
+            // Filter orders by dealer ID and by date ranges for daily, weekly, and monthly orders
+            var dailyFilter = Builders<Order>.Filter.Eq(order => order.OrderItems[0].DealerId, dealerId) &
+                              Builders<Order>.Filter.Gte(order => order.OrderDate, startOfDay);
+            var weeklyFilter = Builders<Order>.Filter.Eq(order => order.OrderItems[0].DealerId, dealerId) &
+                               Builders<Order>.Filter.Gte(order => order.OrderDate, startOfWeek);
+            var monthlyFilter = Builders<Order>.Filter.Eq(order => order.OrderItems[0].DealerId, dealerId) &
+                                Builders<Order>.Filter.Gte(order => order.OrderDate, startOfMonth);
+
+            // Get the total number of orders and total sales amount for the dealer in the specified date ranges
+            var dailyOrders = await _orders.Find(dailyFilter).ToListAsync();
+            var weeklyOrders = await _orders.Find(weeklyFilter).ToListAsync();
+            var monthlyOrders = await _orders.Find(monthlyFilter).ToListAsync();
+            var allOrders = await _orders.Find(Builders<Order>.Filter.Eq(order => order.OrderItems[0].DealerId, dealerId)).ToListAsync();
+
+            // Compute the statistics
+            var viewModel = new DealerPanelIndexModel
+            {
+                OrderCountDaily = dailyOrders.Count,
+                OrderTotalDaily = dailyOrders.Sum(order => order.TotalAmount),
+                OrderCountWeekly = weeklyOrders.Count,
+                OrderTotalWeekly = weeklyOrders.Sum(order => order.TotalAmount),
+                OrderCountMonthly = monthlyOrders.Count,
+                OrderTotalMonthly = monthlyOrders.Sum(order => order.TotalAmount),
+                TotalCustomerCount = allOrders.Select(order => order.UserId).Distinct().Count(),
+                OrderCountTotal = allOrders.Count,
+                OrderTotal = allOrders.Sum(order => order.TotalAmount),
+               
+                TopProductName = allOrders.SelectMany(order => order.OrderItems)
+                                          .GroupBy(item => item.ProductName)
+                                          .OrderByDescending(group => group.Sum(item => item.Quantity))
+                                          .FirstOrDefault()?.Key
+            };
+
+            return viewModel;
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FashionGrid.OrderService.Models;
 using FashionGrid.OrderService.Models.Dto;
+using FashionGrid.OrderService.Services;
 using FashionGrid.OrderService.Services.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -114,5 +115,34 @@ namespace FashionGrid.OrderService.Controllers
             }
             return Ok(_responseDto);
         }
+
+        [HttpGet("GetDealerPanelIndexStatistics/{dealerId}")]
+        public async Task<IActionResult> GetDealerPanelIndexStatistics(string dealerId)
+        {
+            try
+            {
+
+                DealerPanelIndexModel statistics = new DealerPanelIndexModel();
+
+                statistics = await _orderService.GetDealerPanelIndexStatistics(dealerId);
+
+                _responseDto.Result = statistics;
+                _responseDto.Message = "Dealer panel index statistics retrieved successfully";
+            }
+            catch (Exception ex)
+            {
+                // If there's an exception, set the failure message
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = $"Error retrieving dealer panel index statistics: {ex.Message}";
+                return BadRequest(_responseDto);
+            }
+
+            // If successful, return the DTO with all the statistics
+            return Ok(_responseDto);
+        }
+
     }
+
+
+
 }
