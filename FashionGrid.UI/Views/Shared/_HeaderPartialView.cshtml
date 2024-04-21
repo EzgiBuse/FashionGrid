@@ -9,7 +9,7 @@
                     <div class="col-lg-2 col-md-2">
                         <div class="main-logo">
                             <a href="index.html">
-                                <img src="/ultras-1.0.0/images/main-logo.png" alt="logo">
+                               <h3>Fashion Grid</h3>
                             </a>
                         </div>
                     </div>
@@ -23,26 +23,20 @@
                                     <li><a class="nav-link" asp-controller="Product" asp-action="Index">Products</a></li>
 
                                    
-
-                                    <li class="menu-item has-sub">
-                                        <a href="blog.html" class="item-anchor d-flex align-item-center" data-effect="Blog">Blog<i class="icon icon-chevron-down"></i></a>
-                                        <ul class="submenu">
-                                            <li><a href="blog.html" class="item-anchor">Blog</a></li>
-                                            <li><a href="blog-sidebar.html" class="item-anchor">Blog with sidebar<span class="text-primary"> (PRO)</span></a></li>
-                                            <li><a href="blog-masonry.html" class="item-anchor">Blog masonry<span class="text-primary"> (PRO)</span></a></li>
-                                            <li><a href="single-post.html" class="item-anchor">Single post</a></li>
-                                        </ul>
-                                    </li>
-
                                     <li><a href="contact.html" class="item-anchor" data-effect="Contact">Contact</a></li>
                                     @if (!User.Identity.IsAuthenticated)
                                     {
                                         <li><a class="nav-link" asp-controller="Login" asp-action="Login">Login</a></li>
                                         <li><a class="nav-link" asp-controller="Register" asp-action="Register">Register</a></li>
+                                       
                                     }
                                     else
                                     {
                                         <li><a class="nav-link" href="#">Hi @User.Identity.Name</a></li>
+                                        if (User.IsInRole("DEALER"))
+                                        {
+                                            <li><a class="nav-link" asp-controller="DealerPanel" asp-action="Index">My Shop</a></li>
+                                        }
                                         <li><a class="nav-link" asp-controller="Cart" asp-action="Index">Cart</a></li>
                                         <li><a class="nav-link" asp-controller="Login" asp-action="Logout">Logout</a></li>
                                        
