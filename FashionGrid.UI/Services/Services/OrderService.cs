@@ -8,6 +8,7 @@ namespace FashionGrid.UI.Services.Services
     public class OrderService : IOrderService
     {
         private readonly IBaseService _baseService;
+        private const string BaseOrderUrl = "https://localhost:7240/Orders";
 
         public OrderService(IBaseService baseService)
         {
@@ -20,7 +21,7 @@ namespace FashionGrid.UI.Services.Services
             {
                 ApiType = ApiType.POST,
                 Data = order,
-                Url = "https://localhost:7203/api/Orders"
+                Url = BaseOrderUrl
             });
         }
 
@@ -29,7 +30,7 @@ namespace FashionGrid.UI.Services.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = $"https://localhost:7203/api/Orders/GetOrderById/{id}"
+                Url = $"{BaseOrderUrl}/GetOrderById/{id}"
             });
         }
 
@@ -38,7 +39,7 @@ namespace FashionGrid.UI.Services.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = $"https://localhost:7203/api/Orders/GetOrdersByUserId/{userId}"
+                Url = $"{BaseOrderUrl}/GetOrdersByUserId/{userId}"
             });
         }
 
@@ -47,7 +48,7 @@ namespace FashionGrid.UI.Services.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.PUT,
-                Url = $"https://localhost:7203/api/Orders/{orderId}/{status}"
+                Url = $"{BaseOrderUrl}/{orderId}/{status}"
             });
         }
 
@@ -56,7 +57,7 @@ namespace FashionGrid.UI.Services.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = $"https://localhost:7203/api/Orders/GetOrdersByDealerId/{dealerId}"
+                Url = $"{BaseOrderUrl}/GetOrdersByDealerId/{dealerId}"
             });
         }
 
@@ -65,7 +66,7 @@ namespace FashionGrid.UI.Services.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.GET,
-                Url = $"https://localhost:7203/api/Orders/GetDealerPanelIndexStatistics/{dealerId}"
+                Url = $"{BaseOrderUrl}/GetDealerPanelIndexStatistics/{dealerId}"
             });
         }
     }

@@ -21,34 +21,40 @@
             margin-right: 10px; /* ensures spacing between image and text */
         }
 
+       
+
         .table th, .table td {
             vertical-align: middle;
-            text-align: center;
-            padding: 0.75rem; /* Adjust padding to ensure consistent vertical alignment */
+            text-align: center; /* This should center the text inside the cell horizontally */
+            padding: 1.5rem;
         }
 
+        /* If you want to ensure the table itself is centered in the container */
         .table-responsive {
-            overflow-x: auto; /* Allows table to be scrollable horizontally on small devices */
+            width: calc(100% - 9rem); /* Adjusts the width of the table */
+            margin: 0 auto; /* Centers the table in the container */
         }
+
 
         .control-width {
-            width: 60px; /* Smaller input width for quantity to center it better */
+            width: 55px; /* Smaller input width for quantity to center it better */
             margin: auto; /* Centers the input in its cell */
             display: block; /* Ensures it doesn't stay inline */
         }
+
     </style>
 </head>
 <body>
     @Html.Partial("_HeaderPartialView")
-
+    <hr />
     <section class="shopping-cart">
-        <div class="container my-5">
+        <div class="container my-12">
             <div class="row justify-content-center">
-                <div class="col-lg-10">
+                <div class="col-lg-9">
                     <div class="card shadow">
                         <div class="card-body">
                             <h2 class="text-center my-4">Shopping Cart</h2>
-                            <div class="table-responsive">
+                            <div class="table-responsive" >
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
@@ -64,7 +70,7 @@
                                         @foreach (var item in Model.Items)
                                         {
                                             <tr>
-                                                <td class="centered-content">
+                                                <td>
                                                     <img src="@Url.Content(item.ImageUrl)" alt="@item.Name" class="product-img">
                                                     <span>@item.Name</span>
                                                 </td>
@@ -85,8 +91,8 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="4" class="text-right">Total:</th>
-                                            <th colspan="2">€@Model.TotalPrice.ToString("0.00")</th>
+                                            <th colspan="12" class="text-right">Total:</th>
+                                            <th colspan="12">€@Model.TotalPrice.ToString("0.00")</th>
                                         </tr>
                                     </tfoot>
                                 </table>

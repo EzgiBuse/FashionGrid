@@ -24,7 +24,7 @@ namespace FashionGrid.ProductCatalogService.Services
             }
             catch (Exception ex)
             {
-               // _logger.LogError("An error occurred when retrieving all products: {ExceptionMessage}", ex.Message);
+              
                 throw;
             }
         }
@@ -37,7 +37,7 @@ namespace FashionGrid.ProductCatalogService.Services
             }
             catch (Exception ex)
             {
-               // _logger.LogError("An error occurred when retrieving a product by ID: {ExceptionMessage}", ex.Message);
+               
                 throw;
             }
         }
@@ -50,7 +50,7 @@ namespace FashionGrid.ProductCatalogService.Services
             }
             catch (Exception ex)
             {
-               // _logger.LogError("An error occurred when creating a new product: {ExceptionMessage}", ex.Message);
+               
                 throw;
             }
         }
@@ -63,7 +63,7 @@ namespace FashionGrid.ProductCatalogService.Services
             }
             catch (Exception ex)
             {
-               // _logger.LogError("An error occurred when updating a product: {ExceptionMessage}", ex.Message);
+               
                 throw;
             }
         }
@@ -76,7 +76,7 @@ namespace FashionGrid.ProductCatalogService.Services
             }
             catch (Exception ex)
             {
-               // _logger.LogError("An error occurred when deleting a product: {ExceptionMessage}", ex.Message);
+               
                 throw;
             }
         }

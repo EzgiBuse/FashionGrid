@@ -8,7 +8,7 @@ namespace FashionGrid.UI.Services.Services
     public class CartService : ICartService
     {
         private readonly IBaseService _baseService;
-        private const string BaseCartUrl = "https://localhost:7202/api/Carts";  // Adjust the URL as needed
+        private const string BaseCartUrl = "https://localhost:7240/Carts"; 
 
         public CartService(IBaseService baseService)
         {

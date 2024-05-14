@@ -8,7 +8,7 @@ namespace FashionGrid.UI.Services.Services
     public class PaymentService : IPaymentService
     {
         private readonly IBaseService _baseService;
-        private const string BasePaymentUrl = "https://localhost:7204/api/Payments";  // Adjust the URL as needed
+        private const string BasePaymentUrl = "https://localhost:7240/Payments";  // Adjust the URL as needed
 
         public PaymentService(IBaseService baseService)
         {

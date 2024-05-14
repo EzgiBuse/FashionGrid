@@ -12,7 +12,8 @@
       "UpstreamPathTemplate": "/Users/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
-    {//Product Service
+    {
+      // ProductService - Product listing (No Authorization)
       "DownstreamPathTemplate": "/api/Products",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -22,9 +23,30 @@
         }
       ],
       "UpstreamPathTemplate": "/Products",
-      "UpstreamHttpMethod": [ "Get","Post" ]
+      "UpstreamHttpMethod": [ "Get" ]
     },
     {
+      // ProductService - Add product (Requires DEALER Role)
+      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7201
+        }
+      ],
+      "UpstreamPathTemplate": "/Products",
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "DEALER"
+      }
+    },
+    {
+      // ProductService - Product details (No Authorization)
       "DownstreamPathTemplate": "/api/Products/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -34,7 +56,183 @@
         }
       ],
       "UpstreamPathTemplate": "/Products/{id}",
-      "UpstreamHttpMethod": [ "Get", "Put", "Delete" ]
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      // ProductService - Update/Delete product (Requires DEALER Role)
+      "DownstreamPathTemplate": "/api/Products/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7201
+        }
+      ],
+      "UpstreamPathTemplate": "/Products/{id}",
+      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer",
+        "AllowedScopes": []
+      },
+      "RouteClaimsRequirement": {
+        "Role": "DEALER"
+      }
+    },
+    {
+      // CartService: Get cart by user ID
+      "DownstreamPathTemplate": "/api/Carts/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/Carts/{userId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      // CartService: Add to cart
+      "DownstreamPathTemplate": "/api/Carts/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/Carts/{userId}",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      // CartService: Remove item from cart
+      "DownstreamPathTemplate": "/api/Carts/{userId}/{itemId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/Carts/{userId}/{itemId}",
+      "UpstreamHttpMethod": [ "Delete" ]
+    },
+    {
+      // CartService: Update cart item
+      "DownstreamPathTemplate": "/api/Carts/{userId}/{itemId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/Carts/{userId}/{itemId}",
+      "UpstreamHttpMethod": [ "Put" ]
+    },
+    {
+      // CartService: Clear cart
+      "DownstreamPathTemplate": "/api/Carts/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/Carts/{userId}",
+      "UpstreamHttpMethod": [ "Delete" ]
+    },
+    {
+      // OrderService: Create order
+      "DownstreamPathTemplate": "/api/Orders",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "UpstreamPathTemplate": "/Orders",
+      "UpstreamHttpMethod": [ "Post" ]
+    },
+    {
+      // OrderService: Get order by ID
+      "DownstreamPathTemplate": "/api/Orders/GetOrderById/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "UpstreamPathTemplate": "/Orders/GetOrderById/{id}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      // OrderService: Get orders by user ID
+      "DownstreamPathTemplate": "/api/Orders/GetOrdersByUserId/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "UpstreamPathTemplate": "/Orders/GetOrdersByUserId/{userId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      // OrderService: Update order status
+      "DownstreamPathTemplate": "/api/Orders/{orderId}/{status}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "UpstreamPathTemplate": "/Orders/{orderId}/{status}",
+      "UpstreamHttpMethod": [ "Put" ]
+    },
+    {
+      // OrderService: Get orders by dealer ID
+      "DownstreamPathTemplate": "/api/Orders/GetOrdersByDealerId/{dealerId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "UpstreamPathTemplate": "/Orders/GetOrdersByDealerId/{dealerId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      // OrderService: Get dealer panel index statistics
+      "DownstreamPathTemplate": "/api/Orders/GetDealerPanelIndexStatistics/{dealerId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7203
+        }
+      ],
+      "UpstreamPathTemplate": "/Orders/GetDealerPanelIndexStatistics/{dealerId}",
+      "UpstreamHttpMethod": [ "Get" ]
+    },
+    {
+      // PaymentService: Create Stripe session
+      "DownstreamPathTemplate": "/api/Payments/CreateCheckoutSession",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7204
+        }
+      ],
+      "UpstreamPathTemplate": "/Payments/CreateCheckoutSession",
+      "UpstreamHttpMethod": [ "Post" ]
     }
   ]
  
