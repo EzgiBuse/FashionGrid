@@ -13,7 +13,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ]
     },
     {
-      // ProductService - Product listing (No Authorization)
       "DownstreamPathTemplate": "/api/Products",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -23,11 +22,10 @@
         }
       ],
       "UpstreamPathTemplate": "/Products",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ] // GET requests do not require authorization
     },
     {
-      // ProductService - Add product (Requires DEALER Role)
-      "DownstreamPathTemplate": "/api/Products",
+      "DownstreamPathTemplate": "/api/Products/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -35,77 +33,82 @@
           "Port": 7201
         }
       ],
-      "UpstreamPathTemplate": "/Products",
+      "UpstreamPathTemplate": "/Products/{id}",
+      "UpstreamHttpMethod": [ "Get" ] // GET requests do not require authorization
+    },
+    {
+      "DownstreamPathTemplate": "/api/Products/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7201
+        }
+      ],
+      "UpstreamPathTemplate": "/Products/{id}",
+      "UpstreamHttpMethod": [ "Post", "Put", "Delete" ], // Other requests require authorization
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "DEALER" // Require "DEALER" role for these requests
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Carts/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/Carts/{userId}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "CUSTOMER"
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/Carts/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7202
+        }
+      ],
+      "UpstreamPathTemplate": "/Carts/{userId}",
       "UpstreamHttpMethod": [ "Post" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
+        "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "Role": "DEALER"
+        "role": "CUSTOMER"
       }
     },
     {
-      // ProductService - Product details (No Authorization)
-      "DownstreamPathTemplate": "/api/Products/{id}",
+      "DownstreamPathTemplate": "/api/Carts/{userId}/{itemId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7201
+          "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/Products/{id}",
-      "UpstreamHttpMethod": [ "Get" ]
-    },
-    {
-      // ProductService - Update/Delete product (Requires DEALER Role)
-      "DownstreamPathTemplate": "/api/Products/{id}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7201
-        }
-      ],
-      "UpstreamPathTemplate": "/Products/{id}",
-      "UpstreamHttpMethod": [ "Put", "Delete" ],
+      "UpstreamPathTemplate": "/Carts/{userId}/{itemId}",
+      "UpstreamHttpMethod": [ "Delete" ],
       "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer",
-        "AllowedScopes": []
+        "AuthenticationProviderKey": "Bearer"
       },
       "RouteClaimsRequirement": {
-        "Role": "DEALER"
+        "role": "CUSTOMER"
       }
     },
     {
-      // CartService: Get cart by user ID
-      "DownstreamPathTemplate": "/api/Carts/{userId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7202
-        }
-      ],
-      "UpstreamPathTemplate": "/Carts/{userId}",
-      "UpstreamHttpMethod": [ "Get" ]
-    },
-    {
-      // CartService: Add to cart
-      "DownstreamPathTemplate": "/api/Carts/{userId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7202
-        }
-      ],
-      "UpstreamPathTemplate": "/Carts/{userId}",
-      "UpstreamHttpMethod": [ "Post" ]
-    },
-    {
-      // CartService: Remove item from cart
       "DownstreamPathTemplate": "/api/Carts/{userId}/{itemId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -115,23 +118,15 @@
         }
       ],
       "UpstreamPathTemplate": "/Carts/{userId}/{itemId}",
-      "UpstreamHttpMethod": [ "Delete" ]
+      "UpstreamHttpMethod": [ "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "CUSTOMER"
+      }
     },
     {
-      // CartService: Update cart item
-      "DownstreamPathTemplate": "/api/Carts/{userId}/{itemId}",
-      "DownstreamScheme": "https",
-      "DownstreamHostAndPorts": [
-        {
-          "Host": "localhost",
-          "Port": 7202
-        }
-      ],
-      "UpstreamPathTemplate": "/Carts/{userId}/{itemId}",
-      "UpstreamHttpMethod": [ "Put" ]
-    },
-    {
-      // CartService: Clear cart
       "DownstreamPathTemplate": "/api/Carts/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -141,10 +136,16 @@
         }
       ],
       "UpstreamPathTemplate": "/Carts/{userId}",
-      "UpstreamHttpMethod": [ "Delete" ]
+      "UpstreamHttpMethod": [ "Delete" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "CUSTOMER"
+      }
     },
     {
-      // OrderService: Create order
+      // OrderService: Create order (Requires CUSTOMER role)
       "DownstreamPathTemplate": "/api/Orders",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -154,10 +155,16 @@
         }
       ],
       "UpstreamPathTemplate": "/Orders",
-      "UpstreamHttpMethod": [ "Post" ]
+      "UpstreamHttpMethod": [ "Post" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "CUSTOMER"
+      }
     },
     {
-      // OrderService: Get order by ID
+      // OrderService: Get order by ID (Requires CUSTOMER or DEALER role)
       "DownstreamPathTemplate": "/api/Orders/GetOrderById/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -167,10 +174,16 @@
         }
       ],
       "UpstreamPathTemplate": "/Orders/GetOrderById/{id}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "CUSTOMER,DEALER"
+      }
     },
     {
-      // OrderService: Get orders by user ID
+      // OrderService: Get orders by user ID (Requires CUSTOMER role)
       "DownstreamPathTemplate": "/api/Orders/GetOrdersByUserId/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -180,10 +193,16 @@
         }
       ],
       "UpstreamPathTemplate": "/Orders/GetOrdersByUserId/{userId}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "CUSTOMER"
+      }
     },
     {
-      // OrderService: Update order status
+      // OrderService: Update order status (Requires DEALER role)
       "DownstreamPathTemplate": "/api/Orders/{orderId}/{status}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -193,10 +212,16 @@
         }
       ],
       "UpstreamPathTemplate": "/Orders/{orderId}/{status}",
-      "UpstreamHttpMethod": [ "Put" ]
+      "UpstreamHttpMethod": [ "Put" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "DEALER"
+      }
     },
     {
-      // OrderService: Get orders by dealer ID
+      // OrderService: Get orders by dealer ID (Requires DEALER role)
       "DownstreamPathTemplate": "/api/Orders/GetOrdersByDealerId/{dealerId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -206,10 +231,16 @@
         }
       ],
       "UpstreamPathTemplate": "/Orders/GetOrdersByDealerId/{dealerId}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "DEALER"
+      }
     },
     {
-      // OrderService: Get dealer panel index statistics
+      // OrderService: Get dealer panel index statistics (Requires DEALER role)
       "DownstreamPathTemplate": "/api/Orders/GetDealerPanelIndexStatistics/{dealerId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
@@ -219,7 +250,13 @@
         }
       ],
       "UpstreamPathTemplate": "/Orders/GetDealerPanelIndexStatistics/{dealerId}",
-      "UpstreamHttpMethod": [ "Get" ]
+      "UpstreamHttpMethod": [ "Get" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      },
+      "RouteClaimsRequirement": {
+        "role": "DEALER"
+      }
     },
     {
       // PaymentService: Create Stripe session

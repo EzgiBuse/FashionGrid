@@ -1,6 +1,7 @@
 ﻿using FashionGrid.ProductCatalogService.Models;
 using FashionGrid.ProductCatalogService.Models.Dto;
 using FashionGrid.ProductCatalogService.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using System;
@@ -25,6 +26,7 @@ namespace FashionGrid.ProductCatalogService.Controllers
             _responseDto = new ResponseDto();
         }
 
+        
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
